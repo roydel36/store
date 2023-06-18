@@ -6,7 +6,7 @@ const Search = ({searchItem,handleSearchItem}) => {
     <div className = "searchBar">
         <input type = "text" 
         onChange = {handleSearchItem} value = {searchItem} 
-        placeholder = "Enter an item"/>
+        placeholder = "Search for an item"/>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import Sidebar from "../Sidebar/Sidebar"
 import Home from "../Home/Home"
 import About from "../About/About"
 import Contact from "../Contact/Contact"
+import Footer from "../Footer/Footer"
 import "./App.css"
 
 export default function App() {
@@ -21,7 +22,7 @@ export default function App() {
           <About />
           <h2 class="center">Contact</h2>
           <Contact />
-
+          <Footer />
         </main>
       </BrowserRouter>
     </div>

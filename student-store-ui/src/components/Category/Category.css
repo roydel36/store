@@ -1,0 +1,20 @@
+.category {
+    text-align: center;
+    margin: 10px;
+}
+
+.select {
+    background-color: transparent;
+    border: transparent;
+    font-size: 30px;
+    font-weight: bolder;
+    padding-right: 50px;
+    padding-left: 50px;
+    cursor: pointer;
+}
+
+.select:hover{
+    text-decoration: 5px underline #2C4047;
+}
+
+
