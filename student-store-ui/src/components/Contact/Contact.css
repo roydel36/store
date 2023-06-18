@@ -1,0 +1,46 @@
+.contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    width: 75%;
+}
+.heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 500px;
+    width: 70%;
+    align-self: center;
+    background-color: gainsboro;
+    border: 50px solid gainsboro;
+    outline: 3px solid black;
+}
+
+.abt1 {
+    width: 250px;
+    height: 250px;
+}
+
+h1 {
+    font-size: 60px;
+    margin: 2px;
+    padding: 2px;
+    color: white;
+}
+
+p {
+    margin: 2px;
+    padding: 2px;
+    color: white;
+    font-size: 20px;
+}
+
+.center1 {
+    text-align: center;
+    text-align: center;
+}
+
+.color {
+    color: black;
+    width: 100%;
+}

@@ -1,0 +1,10 @@
+.searchBar {
+    text-align: center;
+    
+}
+
+input {
+    width: 50%;
+    margin: 5px;
+    padding: 10px;
+}
