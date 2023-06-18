@@ -1,0 +1,41 @@
+.about {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+.foot {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 70%;
+    align-self: center;
+    background-color: #2C4047;
+    border: 50px solid #2C4047;
+    outline: 3px solid black;
+}
+
+.hero-img1 {
+    width: 250px;
+    height: 250px;
+ 
+}
+
+h1 {
+    font-size: 60px;
+    margin: 2px;
+    padding: 2px;
+    color: white;
+}
+
+p {
+    margin: 2px;
+    padding: 2px;
+    color: white;
+    font-size: 20px;
+}
+
+.center {
+    text-align: center;
+    text-align: center;
+}
