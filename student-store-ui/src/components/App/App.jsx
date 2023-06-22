@@ -1,38 +1,34 @@
-import * as React from "react"
-import { BrowserRouter } from 'react-router-dom'
-import Navbar from "../Navbar/Navbar"
-import Home from "../Home/Home"
-import "./App.css"
-import ProductDetail from "../ProductDetail/ProductDetail"
-import axios from 'axios'
-import { useState } from "react"
-import { useEffect } from "react"
-import {Routes, Route } from 'react-router-dom'
-
+import * as React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
+import Home from "../Home/Home";
+import ProductDetail from "../ProductDetail/ProductDetail";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import "./App.css";
+import Sidebar from "../Sidebar/Sidebar"
 
 export default function App() {
+  const [products, setProducts] = useState([]);
 
-  let [products,setProducts] = useState([])
-  
-    useEffect(() => {
-      
-        axios.get('https://codepath-store-api.herokuapp.com/store').then((response) => {
-          setProducts(response.data.products);
-        })
-    }, [])
+  useEffect(() => {
+    axios.get("http://localhost:3007/store").then((response) => {
+      setProducts(response.data);
+    });
+  }, []);
 
   return (
     <div className="app">
       <BrowserRouter>
         <main>
-          {/* YOUR CODE HERE! */}
+          <Sidebar />
           <Navbar />
           <Routes>
-          <Route path = "/products/:productId" element = {<ProductDetail></ProductDetail>}></Route>
-          <Route path = "/" element = {<Home products = {products} />}></Route>
+            <Route path="/products/:productId" element={<ProductDetail />} />
+            <Route path="/" element={<Home products={products} />} />
           </Routes>
         </main>
       </BrowserRouter>
     </div>
-  )
+  );
 }

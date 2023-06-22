@@ -27,7 +27,7 @@ export default function Home({products}) {
       <Hero/>
       <Search searchItem = {searchItem} handleSearchItem = {handleSearchItem}/>
       <Category handleUpdateCategory = {handleUpdateCategory}/>
-      /*<ProductGrid products = {products} searchItem = {searchItem} activeCategory={activeCategory}/>*/
+      <ProductGrid products = {products} searchItem = {searchItem} activeCategory={activeCategory}/>
 
       <h2 className="lol">About Us</h2>
       <About></About>

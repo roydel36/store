@@ -9,9 +9,9 @@ const ProductDetail = () => {
   const {productId} = useParams()
   let showDescription = false
   useEffect(() => {
-    axios.get(`https://codepath-store-api.herokuapp.com/store/${productId}`).then((response) => {
-      setProducts(response.data.product);
-    })
+    axios.get(`http://localhost:3007/store/${productId}`).then((response) => {
+      setProducts(response.data);
+    })    
 }, 
 [])
   return (
