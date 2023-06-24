@@ -17,6 +17,7 @@ const ProductCard = ({
   const handleRemoveFromCart = () => {
     handleRemoveItemFromCart(product.id);
   };
+  
 
   return (
     <div className="product-card">

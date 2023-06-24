@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
-import Home from "../Home/Home";
-import ProductDetail from "../ProductDetail/ProductDetail";
-// import NotFound from "../NotFound/NotFound"; 
-import axios from "axios";
-import "./App.css";
-import Sidebar from "../Sidebar/Sidebar";
-import ShoppingCart from "../ShoppingCart/ShoppingCart"; 
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar';
+import Home from '../Home/Home';
+import ProductDetail from '../ProductDetail/ProductDetail';
+// import NotFound from "../NotFound/NotFound";
+import axios from 'axios';
+import './App.css';
+import Sidebar from '../Sidebar/Sidebar';
+import ShoppingCart from '../ShoppingCart/ShoppingCart';
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -20,17 +20,19 @@ export default function App() {
     email: '',
     error: null,
     success: false,
+    receipt: null,
   });
+  
 
   useEffect(() => {
     axios
-      .get("http://localhost:3007/store")
+      .get('http://localhost:3007/store')
       .then((response) => {
         setProducts(response.data);
         setIsFetching(false);
       })
       .catch((error) => {
-        setError("Error fetching products from the API.");
+        setError('Error fetching products from the API.');
         setIsFetching(false);
       });
   }, []);
@@ -41,15 +43,11 @@ export default function App() {
 
   const handleAddItemToCart = (productId, productName, productPrice, quantity) => {
     const updatedCart = [...shoppingCart];
-    const existingCartItemIndex = updatedCart.findIndex(
-      (cartItem) => cartItem.itemId === productId
-    );
+    const existingCartItemIndex = updatedCart.findIndex((cartItem) => cartItem.itemId === productId);
 
     if (existingCartItemIndex !== -1) {
-      // If the item is already in the cart, update its quantity
       updatedCart[existingCartItemIndex].quantity++;
     } else {
-      // If the item is not in the cart, add it as a new item
       updatedCart.push({ itemId: productId, name: productName, price: productPrice, quantity: 1 });
     }
 
@@ -58,71 +56,79 @@ export default function App() {
 
   const handleRemoveItemFromCart = (productId) => {
     setShoppingCart((prevCart) => {
-      const updatedCart = prevCart.map((item) => {
-        if (item.itemId === productId) {
-          return {
-            ...item,
-            quantity: item.quantity - 1,
-          };
-        }
-        return item;
-      }).filter((item) => item.quantity > 0);
-
+      const updatedCart = prevCart
+        .map((item) => {
+          if (item.itemId === productId) {
+            return {
+              ...item,
+              quantity: item.quantity - 1,
+            };
+          }
+          return item;
+        })
+        .filter((item) => item.quantity > 0);
+  
       return updatedCart;
     });
   };
+  
 
   const handleOnCheckoutFormChange = (name, value) => {
     setCheckoutForm((prevForm) => ({
       ...prevForm,
       [name]: value,
-      error: null
+      error: null,
     }));
   };
 
   const handleOnSubmitCheckoutForm = () => {
-    if (!checkoutForm.name || !checkoutForm.email) {
+  if (shoppingCart.length === 0 || !checkoutForm.name || !checkoutForm.email) {
+    setCheckoutForm((prevForm) => ({
+      ...prevForm,
+      error:
+        'Name and email are both required fields, and the cart must have at least one item to complete the purchase.',
+    }));
+    return;
+  }
+
+  const order = {
+    user: {
+      name: checkoutForm.name,
+      email: checkoutForm.email,
+    },
+    shoppingCart: shoppingCart.map((item) => ({
+      itemId: item.itemId,
+      quantity: item.quantity,
+    })),
+  };
+
+  axios
+    .post('http://localhost:3007/store', order)
+    .then((response) => {
+      const newPurchase = response.data.purchase;
+      console.log('Order submitted successfully!');
+
+      setShoppingCart([]);
+      setCheckoutForm((prevForm) => ({
+        name: '',
+        email: '',
+        error: null,
+        success: true,
+        receipt: newPurchase.receipt,
+      }));
+    })
+    .catch((error) => {
+      console.error('Issue submitting the order. Please try again:', error);
       setCheckoutForm((prevForm) => ({
         ...prevForm,
-        error: "Name and email are both required fields to complete the purchase."
+        error: 'Issue submitting the order. Please try again.',
       }));
-      return;
-    }
+    });
+};
 
-    const order = {
-      user: {
-        name: checkoutForm.name,
-        email: checkoutForm.email
-      },
-      shoppingCart: shoppingCart.map((item) => ({
-        itemId: item.itemId,
-        quantity: item.quantity
-      }))
-    };
 
-    axios
-      .post("http://localhost:3007/store", order)
-      .then((response) => {
-        const newPurchase = response.data.purchase;
-
-        console.log("Order submitted successfully!");
-
-        setShoppingCart([]);
-        setCheckoutForm({ name: "", email: "" });
-        setCheckoutForm((prevForm) => ({
-          ...prevForm,
-          success: true,
-          receipt: newPurchase.receipt
-        }));
-      })
-      .catch((error) => {
-        console.error("Issue submitting the order. Please try again:", error);
-        setCheckoutForm((prevForm) => ({
-          ...prevForm,
-          error: "Issue submitting the order. Please try again."
-        }));
-      });
-  };
+  
+  
 
   return (
     <div className="app">
@@ -139,20 +145,17 @@ export default function App() {
             handleOnToggle={handleSidebarToggle}
           />
           <Routes>
+            <Route path="/products/:productId" element={<ProductDetail />} />
             <Route
-              path="/products/:productId"
-              element={<ProductDetail />}
-            />
-            <Route
-              path="/"
-              element={
-                <Home
-                  products={products}
-                  handleAddItemToCart={handleAddItemToCart}
-                  handleRemoveItemFromCart={handleRemoveItemFromCart}
-                />
-              }
-            />
+  path="/"
+  element={
+    <Home
+      products={products}
+      handleAddItemToCart={handleAddItemToCart}
+      handleRemoveItemFromCart={handleRemoveItemFromCart} // Add this line
+    />
+  }
+/>
 
             {/*<Route path="*" element={<NotFound />} /> */}
           </Routes>

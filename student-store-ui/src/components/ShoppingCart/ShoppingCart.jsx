@@ -32,7 +32,7 @@ export default function ShoppingCart({ isOpen, products, shoppingCart }) {
           {shoppingCart.map((item) => {
             const product = products.find((p) => p.id === item.itemId);
             if (!product) {
-              return null; // Skip rendering if the product is not found
+              return null; 
             }
             const subtotal = (product.price * item.quantity).toFixed(2);
             return (
@@ -40,7 +40,6 @@ export default function ShoppingCart({ isOpen, products, shoppingCart }) {
                 <p className="cart-product-name">{product.name}</p>
                 <p className="cart-product-quantity">Quantity: {item.quantity}</p>
                 <p className="cart-product-price">${subtotal}</p>
-
               </div>
             );
           })}

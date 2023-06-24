@@ -1,16 +1,25 @@
-import React from 'react';
+
 import './CheckoutForm.css';
+import React, { useState, useEffect } from 'react';
 
 const CheckoutForm = ({
   isOpen,
   shoppingCart,
   checkoutForm,
   handleOnCheckoutFormChange,
-  handleOnSubmitCheckoutForm
+  handleOnSubmitCheckoutForm,
 }) => {
+  
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleSubmit = () => {
     handleOnSubmitCheckoutForm();
   };
+  
+  useEffect(() => {
+    setSuccessMessage('');
+  }, [checkoutForm, shoppingCart]);
+  
 
   return (
     <div className="checkout-form">
@@ -19,7 +28,7 @@ const CheckoutForm = ({
         name="email"
         placeholder="student@codepath.org"
         value={checkoutForm.email}
-        onChange={(e) => handleOnCheckoutFormChange("email", e.target.value)}
+        onChange={(e) => handleOnCheckoutFormChange('email', e.target.value)}
         className="checkout-form-input"
       />
 
@@ -28,7 +37,7 @@ const CheckoutForm = ({
         name="name"
         placeholder="Student Name"
         value={checkoutForm.name}
-        onChange={(e) => handleOnCheckoutFormChange("name", e.target.value)}
+        onChange={(e) => handleOnCheckoutFormChange('name', e.target.value)}
         className="checkout-form-input"
       />
 
@@ -38,17 +47,12 @@ const CheckoutForm = ({
         </button>
       </div>
 
-      {checkoutForm.error && (
-        <div className="error">
-          Error: {checkoutForm.error}
-        </div>
-      )}
-
-      {checkoutForm.success && (
-        <div className="success">
-          Success! Receipt: {checkoutForm.receipt}
-        </div>
-      )}
+      {checkoutForm.error && <div className="error">Error: {checkoutForm.error}</div>}
+      {successMessage && (
+      <div className="success">
+        Thank you for your purchase! Receipt: {successMessage}
+      </div>
+    )}
     </div>
   );
 };

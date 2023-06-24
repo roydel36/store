@@ -19,10 +19,11 @@ const Sidebar = ({
         <React.Fragment>
           <ShoppingCart shoppingCart={shoppingCart} products={products} isOpen={isOpen} />
           <CheckoutForm
-            checkoutForm={checkoutForm}
-            handleOnCheckoutFormChange={handleOnCheckoutFormChange}
-            handleOnSubmitCheckoutForm={handleOnSubmitCheckoutForm}
-          />
+  checkoutForm={checkoutForm}
+  handleOnCheckoutFormChange={handleOnCheckoutFormChange}
+  handleOnSubmitCheckoutForm={handleOnSubmitCheckoutForm}
+/>
+
         </React.Fragment>
       )}
     </section>
