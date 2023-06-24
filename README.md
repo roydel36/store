@@ -32,7 +32,7 @@ https://www.loom.com/share/d42b57fe7a4c4dc7bf4785fd01e05839
 
 ## *Week 3* Application Features
 
-https://www.youtube.com/watch?v=9pqG__zh7Vo
+https://www.youtube.com/watch?v=Ba4KDYKI84A
 
 ### Core Features
 
