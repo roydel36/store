@@ -4,20 +4,27 @@ const { storage } = require("./data/storage");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.status(200).json(storage.get("products"));
+  const products = storage.get("products").value();
+  res.status(200).json({ products });
 });
 
 router.get("/:productId", (req, res) => {
   const productId = req.params.productId;
-  const product = storage.get("products").find({ id: productId }).value();
-  if (product) {
-    res.status(200).json(product);
+  const products = storage.get("products");
+  if (products) {
+    const product = products.find({ id: productId }).value();
+    if (product) {
+      res.status(200).json({ product });
+    } else {
+      res.status(404).json({ error: "Product not found" });
+    }
   } else {
-    res.status(404).json({ error: "Product not found" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.post("/", (req, res, next) => {
+
+router.post("/", (req, res) => {
   const { shoppingCart, user } = req.body;
 
   if (!shoppingCart || !user) {

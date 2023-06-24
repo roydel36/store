@@ -1,0 +1,28 @@
+.notification {
+    padding: 20px;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.cart-summary{
+    font-weight: bolder;
+}
+
+.cart-item{
+    font-weight: bolder;
+    margin: 5px;
+    padding: 10px;
+    background-color: #1f2d32;
+}
+
+.cart-summary{
+    text-align: center;
+}
+
+.cart-product-quantity{
+    font-size: 15px;
+}
+
+.cart-product-price{
+    font-size: 15px;
+}

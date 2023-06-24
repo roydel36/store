@@ -16,3 +16,33 @@
 .product-description{
     color: black;
 }
+
+.lol {
+    text-align: center;
+}
+
+.add {
+    margin: 5px;
+    width: 80px;
+    background-color: #03C385;
+    padding: 10px;
+    border-radius: 50px;
+    outline: none;
+    border: none;
+    color: white;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.remove {
+    margin: 5px;
+    width: 80px;
+    background-color: #03C385;
+    padding: 10px;
+    border-radius: 50px;
+    outline: none;
+    border: none;
+    color: white;
+    font-weight: bolder;
+    cursor: pointer;
+}

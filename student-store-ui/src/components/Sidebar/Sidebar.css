@@ -1,17 +1,32 @@
 .sidebar {
-    width: 3%;
-    height: 999px;
-    position: fixed;
-    background-color: #2C4047;
+  width: 45px;
+  background-color: #2C4047;
+  transition: width 0.3s ease-in-out;
+  overflow: hidden; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 9999;
 }
 
-.sidebar button {
-    background-color: transparent;
-    color: white;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-    font-size: 30px;
+.sidebar.open {
+  width: 350px;
 }
+
+
+.toggle-button {
+  width: 45px;
+  height: 45px;
+  background-color: #2C4047;
+  color: white;
+  font-size: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  float: right;
+}
+
+
+
+  

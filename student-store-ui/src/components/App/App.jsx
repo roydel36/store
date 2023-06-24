@@ -1,32 +1,162 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import Home from "../Home/Home";
 import ProductDetail from "../ProductDetail/ProductDetail";
+// import NotFound from "../NotFound/NotFound"; 
 import axios from "axios";
-import { useState, useEffect } from "react";
 import "./App.css";
-import Sidebar from "../Sidebar/Sidebar"
+import Sidebar from "../Sidebar/Sidebar";
+import ShoppingCart from "../ShoppingCart/ShoppingCart"; 
 
 export default function App() {
   const [products, setProducts] = useState([]);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [shoppingCart, setShoppingCart] = useState([]);
+  const [checkoutForm, setCheckoutForm] = useState({
+    name: '',
+    email: '',
+    error: null,
+    success: false,
+  });
 
   useEffect(() => {
-    axios.get("http://localhost:3007/store").then((response) => {
-      setProducts(response.data);
-    });
+    axios
+      .get("http://localhost:3007/store")
+      .then((response) => {
+        setProducts(response.data);
+        setIsFetching(false);
+      })
+      .catch((error) => {
+        setError("Error fetching products from the API.");
+        setIsFetching(false);
+      });
   }, []);
+
+  const handleSidebarToggle = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+
+  const handleAddItemToCart = (productId, productName, productPrice, quantity) => {
+    const updatedCart = [...shoppingCart];
+    const existingCartItemIndex = updatedCart.findIndex(
+      (cartItem) => cartItem.itemId === productId
+    );
+
+    if (existingCartItemIndex !== -1) {
+      // If the item is already in the cart, update its quantity
+      updatedCart[existingCartItemIndex].quantity++;
+    } else {
+      // If the item is not in the cart, add it as a new item
+      updatedCart.push({ itemId: productId, name: productName, price: productPrice, quantity: 1 });
+    }
+
+    setShoppingCart(updatedCart);
+  };
+
+  const handleRemoveItemFromCart = (productId) => {
+    setShoppingCart((prevCart) => {
+      const updatedCart = prevCart.map((item) => {
+        if (item.itemId === productId) {
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
+        }
+        return item;
+      }).filter((item) => item.quantity > 0);
+
+      return updatedCart;
+    });
+  };
+
+  const handleOnCheckoutFormChange = (name, value) => {
+    setCheckoutForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+      error: null
+    }));
+  };
+
+  const handleOnSubmitCheckoutForm = () => {
+    if (!checkoutForm.name || !checkoutForm.email) {
+      setCheckoutForm((prevForm) => ({
+        ...prevForm,
+        error: "Name and email are both required fields to complete the purchase."
+      }));
+      return;
+    }
+
+    const order = {
+      user: {
+        name: checkoutForm.name,
+        email: checkoutForm.email
+      },
+      shoppingCart: shoppingCart.map((item) => ({
+        itemId: item.itemId,
+        quantity: item.quantity
+      }))
+    };
+
+    axios
+      .post("http://localhost:3007/store", order)
+      .then((response) => {
+        const newPurchase = response.data.purchase;
+
+        console.log("Order submitted successfully!");
+
+        setShoppingCart([]);
+        setCheckoutForm({ name: "", email: "" });
+        setCheckoutForm((prevForm) => ({
+          ...prevForm,
+          success: true,
+          receipt: newPurchase.receipt
+        }));
+      })
+      .catch((error) => {
+        console.error("Issue submitting the order. Please try again:", error);
+        setCheckoutForm((prevForm) => ({
+          ...prevForm,
+          error: "Issue submitting the order. Please try again."
+        }));
+      });
+  };
 
   return (
     <div className="app">
       <BrowserRouter>
         <main>
-          <Sidebar />
           <Navbar />
+          <Sidebar
+            isOpen={isOpen}
+            shoppingCart={shoppingCart}
+            products={products}
+            checkoutForm={checkoutForm}
+            handleOnCheckoutFormChange={handleOnCheckoutFormChange}
+            handleOnSubmitCheckoutForm={handleOnSubmitCheckoutForm}
+            handleOnToggle={handleSidebarToggle}
+          />
           <Routes>
-            <Route path="/products/:productId" element={<ProductDetail />} />
-            <Route path="/" element={<Home products={products} />} />
+            <Route
+              path="/products/:productId"
+              element={<ProductDetail />}
+            />
+            <Route
+              path="/"
+              element={
+                <Home
+                  products={products}
+                  handleAddItemToCart={handleAddItemToCart}
+                  handleRemoveItemFromCart={handleRemoveItemFromCart}
+                />
+              }
+            />
+
+            {/*<Route path="*" element={<NotFound />} /> */}
           </Routes>
+          <ShoppingCart isOpen={isOpen} products={products} shoppingCart={shoppingCart} />
         </main>
       </BrowserRouter>
     </div>
